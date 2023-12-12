@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Transaction;
+use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
+use Yajra\DataTables\Facades\DataTables;
+
+class TransactionController extends Controller
+{
+    //
+
+
+    public function index()
+    {
+        if (request()->wantsJson()) {
+            $query = Transaction::query();
+            return DataTables::of($query)->toJson();
+        }
+
+        // $transactions = Transaction::get();
+        return view('laporan', get_defined_vars());
+    }
+
+
+    public function dashboard(Request $request): View
+    {
+        $currentMonth = now()->month;
+        $date = Carbon::now();
+        $monthName = $date->format('F');
+
+        $report = Transaction::whereMonth('productions_date', $currentMonth)->select(
+            DB::raw('SUM(a1_deb) as a1_deb'),
+            DB::raw('SUM(a1_amount) as a1_amount'),
+            DB::raw('SUM(a2_deb) as a2_deb'),
+            DB::raw('SUM(a2_amount) as a2_amount'),
+            DB::raw('SUM(a3_deb) as a3_deb'),
+            DB::raw('SUM(a3_amount) as a3_amount'),
+            DB::raw('SUM(a4_deb) as a4_deb'),
+            DB::raw('SUM(a4_amount) as a4_amount'),
+            DB::raw('SUM(a5_deb) as a5_deb'),
+            DB::raw('SUM(a5_amount) as a5_amount'),
+        )
+            ->first();
+        return view('dashboard', [
+            'user' => $request->user(),
+            'report' => $report,
+            'month' => $monthName,
+            'year' => $date->format('Y'),
+        ]);
+    }
+
+
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'productions_date' => ['required', 'date'],
+            'a1_deb' => ['required', 'numeric'],
+            'a1_amount' => ['required', 'numeric'],
+            'a2_deb' => ['required', 'numeric'],
+            'a2_amount' => ['required', 'numeric'],
+            'a3_deb' => ['required', 'numeric'],
+            'a3_amount' => ['required', 'numeric'],
+            'a4_deb' => ['required', 'numeric'],
+            'a4_amount' => ['required', 'numeric'],
+            'a5_deb' => ['required', 'numeric'],
+            'a5_amount' => ['required', 'numeric'],
+        ]);
+        $validated["user_id"] = $request->user()->id;
+        $trx = Transaction::create($validated);
+
+        return Redirect::to('/');
+    }
+}
