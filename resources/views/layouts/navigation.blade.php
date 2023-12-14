@@ -23,6 +23,13 @@
                         </x-nav-link>
                     </div>
                 @endif
+                @if (request()->user()->role == 'operator')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('target')" :active="request()->routeIs('target')">
+                            {{ __('Target') }}
+                        </x-nav-link>
+                    </div>
+                @endif
                 @if (request()->user()->role == 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('users')" :active="request()->routeIs('users')">

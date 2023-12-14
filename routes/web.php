@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/laporan', [TransactionController::class, 'index'])->middleware(['auth', 'verified'])->name('laporan');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', [AuthenticatedSessionController::class, 'create']);
 Route::get('/dashboard', [TransactionController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/laporan', [TransactionController::class, 'index'])->middleware(['auth', 'verified'])->name('laporan');
 Route::post('/laporan', [TransactionController::class, 'store'])->middleware(['auth', 'verified']);
+Route::get('/target', [TargetController::class, 'index'])->middleware(['auth', 'verified'])->name('target');
+Route::post('/target', [TargetController::class, 'store'])->middleware(['auth', 'verified']);
 Route::get('/users', [TransactionController::class, 'users'])->middleware(['auth', 'verified'])->name('users');
 Route::post('/users', [TransactionController::class, 'create_user'])->middleware(['auth', 'verified'])->name('users');
 Route::get('/laporan/export/', [TransactionController::class, 'export']);

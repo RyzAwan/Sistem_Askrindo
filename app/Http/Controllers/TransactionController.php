@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\TransactionExport;
+use App\Models\Target;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,11 +49,12 @@ class TransactionController extends Controller
             DB::raw('SUM(a4_amount) as a4_amount'),
             DB::raw('SUM(a5_deb) as a5_deb'),
             DB::raw('SUM(a5_amount) as a5_amount'),
-        )
-            ->first();
+        )->first();
+        $target = Target::whereMonth('target_date', $currentMonth)->first();
         return view('dashboard', [
             'user' => $request->user(),
             'report' => $report,
+            'target' => $target,
             'month' => $monthName,
             'year' => $date->format('Y'),
         ]);
@@ -106,7 +108,7 @@ class TransactionController extends Controller
         $validated["user_id"] = $request->user()->id;
         $trx = Transaction::create($validated);
 
-        return Redirect::to('/');
+        return Redirect::to('/laporan');
     }
 
     public function export() 

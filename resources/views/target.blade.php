@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Laporan') }}
+            {{ __('Target') }}
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
                     <div class="flex flex-row justify-between items-center mb-8">
-
+{{-- 
                         <a href="/laporan/export/"
                             class="cursor-pointer inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150"
                             type="button">
@@ -22,7 +22,8 @@
                                 </path>
                             </svg>
                             Download Excel
-                        </a>
+                        </a> --}}
+                        <span></span>
                         <button data-modal-target="crud-modal" data-modal-toggle="crud-modal"
                             class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150 ms-4"
                             type="button">
@@ -32,7 +33,7 @@
                                     d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                     clip-rule="evenodd"></path>
                             </svg>
-                            Tambah laporan
+                            Tambah target
                         </button>
                     </div>
 
@@ -40,7 +41,7 @@
                         <table id="example" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th rowspan="2" class="text-center">Tanggal Produksi</th>
+                                    <th rowspan="2" class="text-center">Tanggal Target</th>
                                     <th colspan="2" class="text-center">A1</th>
                                     <th colspan="2" class="text-center">A2</th>
                                     <th colspan="2" class="text-center">A3</th>
@@ -80,7 +81,7 @@
                 <!-- Modal header -->
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Buat Laporan
+                        Buat Target
                     </h3>
                     <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -94,13 +95,13 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form class="p-4 md:p-5 flex flex-col" method="POST" action="/laporan">
+                <form class="p-4 md:p-5 flex flex-col" method="POST" action="/target">
                     @csrf
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal
-                                Produksi</label>
-                            <input type="date" name="productions_date"
+                                Target</label>
+                            <input type="month" name="target_date"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                 placeholder="Type product name" required="">
                         </div>
@@ -136,7 +137,7 @@
                                 d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
                                 clip-rule="evenodd"></path>
                         </svg>
-                        Tambahkan laporan
+                        Tambahkan target
                     </button>
                 </form>
             </div>
@@ -153,25 +154,19 @@
 
         <script>
             $(document).ready(function() {
-                // alert("test");
-                // new DataTable('#example');
 
                 const dashboardTable = $("#example").DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '{{ route('laporan') }}',
-                        // data: function(query) {
-                        //     query.status = $("#status").val()
-                        //     return query
-                        // }
+                        url: '{{ route('target') }}',
                     },
                     columnDefs: [{
                         targets: '_all',
                         defaultContent: '-'
                     }],
                     columns: [{
-                        data: 'productions_date',
+                        data: 'target_date',
                         className: 'text-center',
                         searchable: true,
                     }, {
