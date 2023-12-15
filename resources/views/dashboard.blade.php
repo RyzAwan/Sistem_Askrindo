@@ -39,15 +39,22 @@
                     <p class="text-center text-xl mb-8 mt-10">
                         Target {{ $month . ' ' . $year }}
                     </p>
-                    <div class="grid grid-cols-12">
-                        <div class="col-span-5">
-                            <canvas id="targetDebit"></canvas>
+                    @if (isset($target))
+                        <div class="grid grid-cols-12">
+                            <div class="col-span-5">
+                                <canvas id="targetDebit"></canvas>
+                            </div>
+                            <div class="col-span-1"></div>
+                            <div class="col-span-5">
+                                <canvas id="targetNominal"></canvas>
+                            </div>
                         </div>
-                        <div class="col-span-1"></div>
-                        <div class="col-span-5">
-                            <canvas id="targetNominal"></canvas>
-                        </div>
-                    </div>
+                    @else
+                        <p class="text-center text-l mb-8 mt-10 text-gray-500">
+                            Target belum ditetapkan
+                        </p>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -163,138 +170,140 @@
 
 
 
+                @isset($target)
 
-                const dataTargetDebit = {
-                    labels: [
-                        'A1',
-                        'A2',
-                        'A3',
-                        'A4',
-                        'A5',
-                    ],
-                    datasets: [{
-                        label: 'Debit',
-                        data: [{{ $report['a1_deb'] }},
-                            {{ $report['a2_deb'] }},
-                            {{ $report['a3_deb'] }},
-                            {{ $report['a4_deb'] }},
-                            {{ $report['a5_deb'] }},
+                    const dataTargetDebit = {
+                        labels: [
+                            'A1',
+                            'A2',
+                            'A3',
+                            'A4',
+                            'A5',
                         ],
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        pointBackgroundColor: 'rgb(255, 99, 132)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(255, 99, 132)'
-                    }, {
-                        label: 'Target',
-                        data: [{{ $target['a1_deb'] }},
-                            {{ $target['a2_deb'] }},
-                            {{ $target['a3_deb'] }},
-                            {{ $target['a4_deb'] }},
-                            {{ $target['a5_deb'] }},
-                        ],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(54, 162, 235)'
-                    }]
-                };
-                const configTargetDebit = {
-                    type: 'radar',
-                    data: dataTargetDebit,
-                    options: {
-                        elements: {
-                            line: {
-                                borderWidth: 3
-                            }
-                        },
-                        scales: {
-                            r: {
-                                pointLabels: {
-                                    display: false // Hides the labels around the radar chart
-                                },
-                                ticks: {
-                                    display: false // Hides the labels in the middel (numbers)
+                        datasets: [{
+                            label: 'Debit',
+                            data: [{{ $report['a1_deb'] }},
+                                {{ $report['a2_deb'] }},
+                                {{ $report['a3_deb'] }},
+                                {{ $report['a4_deb'] }},
+                                {{ $report['a5_deb'] }},
+                            ],
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        }, {
+                            label: 'Target',
+                            data: [{{ $target['a1_deb'] }},
+                                {{ $target['a2_deb'] }},
+                                {{ $target['a3_deb'] }},
+                                {{ $target['a4_deb'] }},
+                                {{ $target['a5_deb'] }},
+                            ],
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(54, 162, 235)'
+                        }]
+                    };
+                    const configTargetDebit = {
+                        type: 'radar',
+                        data: dataTargetDebit,
+                        options: {
+                            elements: {
+                                line: {
+                                    borderWidth: 3
+                                }
+                            },
+                            scales: {
+                                r: {
+                                    pointLabels: {
+                                        display: false // Hides the labels around the radar chart
+                                    },
+                                    ticks: {
+                                        display: false // Hides the labels in the middel (numbers)
+                                    }
                                 }
                             }
-                        }
-                    },
-                };
-                const targetDebit = document.getElementById('targetDebit');
-
-                new Chart(targetDebit, configTargetDebit);
-
-
-
-                const dataTargetNominal = {
-                    labels: [
-                        'A1',
-                        'A2',
-                        'A3',
-                        'A4',
-                        'A5',
-                    ],
-                    datasets: [{
-                        label: 'Nominal',
-                        data: [{{ $report['a1_amount'] }},
-                            {{ $report['a2_amount'] }},
-                            {{ $report['a3_amount'] }},
-                            {{ $report['a4_amount'] }},
-                            {{ $report['a5_amount'] }},
-                        ],
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        pointBackgroundColor: 'rgb(255, 99, 132)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(255, 99, 132)'
-                    }, {
-                        label: 'Target',
-                        data: [{{ $target['a1_amount'] }},
-                            {{ $target['a2_amount'] }},
-                            {{ $target['a3_amount'] }},
-                            {{ $target['a4_amount'] }},
-                            {{ $target['a5_amount'] }},
-                        ],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(54, 162, 235)'
-                    }]
-                };
-                const configTargetNominal = {
-                    type: 'radar',
-                    data: dataTargetNominal,
-                    options: {
-                        elements: {
-                            line: {
-                                borderWidth: 3
-                            }
                         },
-                        scales: {
-                            r: {
-                                pointLabels: {
-                                    display: false // Hides the labels around the radar chart
-                                },
-                                ticks: {
-                                    display: false // Hides the labels in the middel (numbers)
+                    };
+                    const targetDebit = document.getElementById('targetDebit');
+
+                    new Chart(targetDebit, configTargetDebit);
+
+
+
+                    const dataTargetNominal = {
+                        labels: [
+                            'A1',
+                            'A2',
+                            'A3',
+                            'A4',
+                            'A5',
+                        ],
+                        datasets: [{
+                            label: 'Nominal',
+                            data: [{{ $report['a1_amount'] }},
+                                {{ $report['a2_amount'] }},
+                                {{ $report['a3_amount'] }},
+                                {{ $report['a4_amount'] }},
+                                {{ $report['a5_amount'] }},
+                            ],
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(255, 99, 132)'
+                        }, {
+                            label: 'Target',
+                            data: [{{ $target['a1_amount'] }},
+                                {{ $target['a2_amount'] }},
+                                {{ $target['a3_amount'] }},
+                                {{ $target['a4_amount'] }},
+                                {{ $target['a5_amount'] }},
+                            ],
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgb(54, 162, 235)'
+                        }]
+                    };
+                    const configTargetNominal = {
+                        type: 'radar',
+                        data: dataTargetNominal,
+                        options: {
+                            elements: {
+                                line: {
+                                    borderWidth: 3
+                                }
+                            },
+                            scales: {
+                                r: {
+                                    pointLabels: {
+                                        display: false // Hides the labels around the radar chart
+                                    },
+                                    ticks: {
+                                        display: false // Hides the labels in the middel (numbers)
+                                    }
                                 }
                             }
-                        }
-                    },
-                };
-                const targetNominal = document.getElementById('targetNominal');
+                        },
+                    };
+                    const targetNominal = document.getElementById('targetNominal');
 
-                new Chart(targetNominal, configTargetNominal);
+                    new Chart(targetNominal, configTargetNominal);
+                @endisset
             });
         </script>
     </x-slot>

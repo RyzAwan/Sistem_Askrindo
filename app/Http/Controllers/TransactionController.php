@@ -50,7 +50,9 @@ class TransactionController extends Controller
             DB::raw('SUM(a5_deb) as a5_deb'),
             DB::raw('SUM(a5_amount) as a5_amount'),
         )->first();
-        $target = Target::whereMonth('target_date', $currentMonth)->first();
+        $target = Target::whereMonth('target_date', $currentMonth)
+                ->latest('target_date')
+                ->first();
         return view('dashboard', [
             'user' => $request->user(),
             'report' => $report,
